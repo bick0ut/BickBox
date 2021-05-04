@@ -4,11 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ConnectException;
+import java.net.Socket;
 
 public class BickBoxClient extends JFrame implements ActionListener {
     private JTextField chatTextField;
     private JTextArea logTextArea;
-    public BickBoxClient(){
+    private Socket cilentSocket;
+    private BufferedReader in;
+    private PrintWriter out;
+
+    public BickBoxClient(String hostname, int port) throws IOException {
+        //set up sockets and in/outs + worker thread
+        this.cilentSocket = new Socket(hostname, port);
+        this.in = new BufferedReader(new InputStreamReader(cilentSocket.getInputStream()));
+        this.out = new PrintWriter(cilentSocket.getOutputStream(), true);
+
+
         //create frame
         JFrame frame = new JFrame("Bick Box");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,6 +77,11 @@ public class BickBoxClient extends JFrame implements ActionListener {
         //add to top panel
         topPanel.add(topTextArea);
 
+        //create worker thread and start it
+        BickBoxClientWorker worker = new BickBoxClientWorker(in, logTextArea);
+        Thread workerThread = new Thread(worker);
+        workerThread.start();
+
         //set up frame
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int)(((dimension.getWidth()) - frame.getWidth())/2);
@@ -80,7 +101,29 @@ public class BickBoxClient extends JFrame implements ActionListener {
             String txt = chatTextField.getText();
             if(txt.isBlank()) return;
             chatTextField.setText("");
-            logTextArea.append("You:\n"+txt+"\n\n");
+            out.println(txt);
+        }
+    }
+
+    public static void main(String[] args){
+        if(args.length != 2){
+            System.out.println("Usage: java BickBoxCilent hostname port");
+            System.exit(0);
+        }
+
+        try {
+            int port = Integer.parseInt(args[1]);
+            BickBoxClient bickFrameClient = new BickBoxClient(args[0], port);
+        } catch (ConnectException e){
+            System.out.println("Connection timed out!");
+            System.exit(0);
+        } catch (NumberFormatException e){
+            System.out.println("Please enter a valid port");
+            System.exit(0);
+        } catch (Exception e){
+            System.out.println("Please contact me");
+            e.printStackTrace();
+            System.exit(0);
         }
     }
 }
