@@ -1,7 +1,6 @@
+package local_demo;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BickBox {
     private JTextField chatTextArea;
