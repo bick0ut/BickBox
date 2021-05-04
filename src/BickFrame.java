@@ -1,6 +1,7 @@
 import org.w3c.dom.Text;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ public class BickFrame extends JFrame implements ActionListener {
         JTextArea chatTextArea = new JTextArea("Type: ");
         chatTextArea.setEditable(false);
         chatTextArea.setHighlighter(null);
+        chatTextArea.setBackground(null);
 
         chatTextField = new JTextField(30);
         chatTextField.setAlignmentX(JTextField.LEADING);
@@ -36,15 +38,29 @@ public class BickFrame extends JFrame implements ActionListener {
         botPanel.add(sendButton);
 
         //create middle panel and components - chat log
-        JPanel midPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel midPanel = new JPanel();
         logTextArea = new JTextArea();
 
         logTextArea.setEditable(false);
         logTextArea.setHighlighter(null);
         logTextArea.setAlignmentX(LEFT_ALIGNMENT);
+        logTextArea.setBackground(null);
 
-        //add to mid panel
-        midPanel.add(logTextArea);
+        JScrollPane scrollPane = new JScrollPane(logTextArea);
+        scrollPane.setPreferredSize(new Dimension(580, 680));
+
+        //add to middle panel
+        midPanel.add(scrollPane);
+
+        //create top panel and components - top label
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JTextArea topTextArea = new JTextArea("Chat");
+        topTextArea.setBackground(null);
+        topTextArea.setHighlighter(null);
+        topTextArea.setEditable(false);
+
+        //add to top panel
+        topPanel.add(topTextArea);
 
         //set up frame
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -53,7 +69,9 @@ public class BickFrame extends JFrame implements ActionListener {
         frame.setLocation(x, y);
         frame.getContentPane().add(BorderLayout.SOUTH, botPanel);
         frame.getContentPane().add(BorderLayout.CENTER, midPanel);
+        frame.getContentPane().add(BorderLayout.NORTH, topPanel);
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 
     @Override
@@ -63,7 +81,7 @@ public class BickFrame extends JFrame implements ActionListener {
             String txt = chatTextField.getText();
             if(txt.isBlank()) return;
             chatTextField.setText("");
-            logTextArea.append("\nYou:\n"+txt);
+            logTextArea.append("You:\n"+txt+"\n\n");
         }
     }
 }
