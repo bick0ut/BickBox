@@ -122,14 +122,14 @@ public class BickBoxClient extends JFrame implements ActionListener {
      * @param args username hostname port
      */
     public static void main(String[] args){
-        if(args.length != 3){
-            System.out.println("Usage: java BickBoxCilent username hostname port");
+        if(args.length != 2){
+            System.out.println("Usage: java BickBoxCilent username port");
             System.exit(0);
         }
 
         try {
-            int port = Integer.parseInt(args[2]);
-            BickBoxClient bickFrameClient = new BickBoxClient(args[0], args[1], port);
+            int port = Integer.parseInt(args[1]);
+            BickBoxClient bickFrameClient = new BickBoxClient(args[0], "bickbox.ddns.net", port);
         } catch (ConnectException e){
             System.out.println("Connection timed out!");
             System.exit(0);
