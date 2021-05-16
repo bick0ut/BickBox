@@ -16,6 +16,11 @@ public class BickBoxServerWorker implements Runnable {
     private boolean active;
     private String username;
 
+    /***
+     * Constructor for the server worker, takes in a clientSocket in order to read and write. Used for handling clients.
+     * @param cilentSocket
+     * @throws IOException
+     */
     public BickBoxServerWorker(Socket cilentSocket) throws IOException {
         this.active = true;
         this.cilentSocket = cilentSocket;
@@ -24,6 +29,9 @@ public class BickBoxServerWorker implements Runnable {
         this.username = "TestUser123";
     }
 
+    /***
+     * Run and responds to client as long as server is active
+     */
     @Override
     public void run() {
         while(active && cilentSocket.isConnected()) {
@@ -38,6 +46,9 @@ public class BickBoxServerWorker implements Runnable {
         System.out.println(username + " has disconnected.");
     }
 
+    /***
+     * Inactivates server
+     */
     public void stop(){
         this.active = false;
     }

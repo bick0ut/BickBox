@@ -8,11 +8,20 @@ import java.util.ArrayList;
 public class BickBoxServer implements Runnable{
     private ServerSocket serverSocket;
     private ArrayList<Runnable> workers;
+
+    /***
+     * Constructor for server, takes in a port to start up the server socket. Used for accepting clients.
+     * @param port
+     * @throws IOException
+     */
     public BickBoxServer(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
         this.workers = new ArrayList<>();
     }
 
+    /***
+     * Creates a new server worker for every client socket accepted, adds the worker to the list of server workers.
+     */
     public void run() {
         System.out.println("Opening server and accepting connections...");
         while(true){
@@ -28,6 +37,10 @@ public class BickBoxServer implements Runnable{
         }
     }
 
+    /***
+     * Sets up the server using port.
+     * @param args port
+     */
     public static void main (String[] args){
         if(args.length != 1){
             System.out.println("Usage: java BickBoxServer port");

@@ -18,6 +18,12 @@ public class BickBoxClient extends JFrame implements ActionListener {
     private BufferedReader in;
     private PrintWriter out;
 
+    /***
+     * Constructor for client, creates all of the GUI using AWT and Swing. Creates a client worker.
+     * @param hostname
+     * @param port
+     * @throws IOException
+     */
     public BickBoxClient(String hostname, int port) throws IOException {
         //set up sockets and in/outs + worker thread
         this.cilentSocket = new Socket(hostname, port);
@@ -94,6 +100,10 @@ public class BickBoxClient extends JFrame implements ActionListener {
         frame.setResizable(false);
     }
 
+    /***
+     * Determines what happens when an action is performed (eg. button click)
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String str = e.getActionCommand();
@@ -105,6 +115,10 @@ public class BickBoxClient extends JFrame implements ActionListener {
         }
     }
 
+    /***
+     * Initializes a client and runs it
+     * @param args hostname port
+     */
     public static void main(String[] args){
         if(args.length != 2){
             System.out.println("Usage: java BickBoxCilent hostname port");
