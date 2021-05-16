@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.sql.Array;
 import java.util.ArrayList;
 
-import static online.Protocol.NEW_MESSAGE;
+import static online.Protocol.*;
 
 public class BickBoxServerWorker implements Runnable {
     private Socket cilentSocket;
@@ -30,8 +30,7 @@ public class BickBoxServerWorker implements Runnable {
         this.cilentSocket = cilentSocket;
         this.in = new BufferedReader(new InputStreamReader(cilentSocket.getInputStream()));
         this.out = new PrintWriter(cilentSocket.getOutputStream(), true);
-        this.username = "TestUser123";
-        System.out.println(username + " has connected.");
+        this.username = "";
     }
 
     /***
@@ -47,10 +46,22 @@ public class BickBoxServerWorker implements Runnable {
      */
     @Override
     public void run() {
+        String input;
+        try {
+            input = in.readLine();
+            username = input;
+            System.out.println(username + " has connected.");
+            //notifies all users of this new user's arrival
+            for (BickBoxServerWorker server : workers) {
+                server.getOut().println(USER_JOINED + username);
+            }
+        } catch (IOException e){
+            stop();
+        }
         while(active && cilentSocket.isConnected()) {
             //do stuff like update
             try {
-                String input = in.readLine();
+                input = in.readLine();
                 //sends info to every other server worker's writer which will reach the client worker's chat log
                 for (BickBoxServerWorker server : workers) {
                     server.getOut().println(NEW_MESSAGE + username + ": " + input);
@@ -58,6 +69,10 @@ public class BickBoxServerWorker implements Runnable {
             } catch (IOException e) {
                 stop();
             }
+        }
+        //notifies all users of this user's departure
+        for (BickBoxServerWorker server : workers) {
+            server.getOut().println(USER_LEFT + username);
         }
         System.out.println(username + " has disconnected.");
     }

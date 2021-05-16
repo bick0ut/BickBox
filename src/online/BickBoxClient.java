@@ -24,7 +24,7 @@ public class BickBoxClient extends JFrame implements ActionListener {
      * @param port
      * @throws IOException
      */
-    public BickBoxClient(String hostname, int port) throws IOException {
+    public BickBoxClient(String username, String hostname, int port) throws IOException {
         //set up sockets and in/outs + worker thread
         this.cilentSocket = new Socket(hostname, port);
         this.in = new BufferedReader(new InputStreamReader(cilentSocket.getInputStream()));
@@ -87,6 +87,7 @@ public class BickBoxClient extends JFrame implements ActionListener {
         BickBoxClientWorker worker = new BickBoxClientWorker(in, logTextArea);
         Thread workerThread = new Thread(worker);
         workerThread.start();
+        out.println(username);
 
         //set up frame
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -98,6 +99,7 @@ public class BickBoxClient extends JFrame implements ActionListener {
         frame.getContentPane().add(BorderLayout.NORTH, topPanel);
         frame.setVisible(true);
         frame.setResizable(false);
+        System.out.println("Successfully connected.");
     }
 
     /***
@@ -117,17 +119,17 @@ public class BickBoxClient extends JFrame implements ActionListener {
 
     /***
      * Initializes a client and runs it
-     * @param args hostname port
+     * @param args username hostname port
      */
     public static void main(String[] args){
-        if(args.length != 2){
-            System.out.println("Usage: java BickBoxCilent hostname port");
+        if(args.length != 3){
+            System.out.println("Usage: java BickBoxCilent username hostname port");
             System.exit(0);
         }
 
         try {
-            int port = Integer.parseInt(args[1]);
-            BickBoxClient bickFrameClient = new BickBoxClient(args[0], port);
+            int port = Integer.parseInt(args[2]);
+            BickBoxClient bickFrameClient = new BickBoxClient(args[0], args[1], port);
         } catch (ConnectException e){
             System.out.println("Connection timed out!");
             System.exit(0);

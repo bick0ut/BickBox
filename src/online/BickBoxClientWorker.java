@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import static online.Protocol.NEW_MESSAGE;
+import static online.Protocol.*;
 
 public class BickBoxClientWorker implements Runnable {
     private JTextArea logTextArea;
@@ -41,6 +41,12 @@ public class BickBoxClientWorker implements Runnable {
 
                     int msgStart = username.length() + 2;
                     logTextArea.append(username+"\n" + msg.substring(msgStart) + "\n\n");
+                } else if (protocol.equals(USER_JOINED)){ //new user has joined, only need one line
+                    String username = msg.split(" ")[0].substring(1);
+                    logTextArea.append(username+" has joined the chat!" + "\n\n");
+                } else if (protocol.equals(USER_LEFT)){ //user has left, only need one line
+                    String username = msg.split(" ")[0].substring(1);
+                    logTextArea.append(username+" has left the chat!" + "\n\n");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
