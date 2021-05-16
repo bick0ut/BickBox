@@ -33,8 +33,12 @@ public class BickBoxClientWorker implements Runnable {
             try {
                 String msg = in.readLine();
                 String protocol = msg.substring(0, 1);
+
+                //formats the message to include username if the protocol indicates a new message
                 if(protocol.equals(NEW_MESSAGE)){
+                    //first string is PUsername, removes the P (protocol)
                     String username = msg.split(" ")[0].substring(1);
+
                     int msgStart = username.length() + 2;
                     logTextArea.append(username+"\n" + msg.substring(msgStart) + "\n\n");
                 }

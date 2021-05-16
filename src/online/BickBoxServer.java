@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class BickBoxServer implements Runnable{
     private ServerSocket serverSocket;
-    private ArrayList<Runnable> workers;
+    private ArrayList<BickBoxServerWorker> workers;
 
     /***
      * Constructor for server, takes in a port to start up the server socket. Used for accepting clients.
@@ -27,7 +27,7 @@ public class BickBoxServer implements Runnable{
         while(true){
             try{
                 Socket cilentSocket = serverSocket.accept();
-                BickBoxServerWorker worker = new BickBoxServerWorker(cilentSocket);
+                BickBoxServerWorker worker = new BickBoxServerWorker(cilentSocket, workers);
                 Thread workerThread = new Thread(worker);
                 workerThread.start();
                 workers.add(worker);
