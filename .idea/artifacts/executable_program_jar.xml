@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="executable program:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/executable_program_jar</output-path>
+    <root id="archive" name="executable program.jar">
+      <element id="module-output" name="executable program" />
+    </root>
+  </artifact>
+</component>

@@ -1,4 +1,4 @@
-package online;
+package client;
 
 public interface Protocol {
     /***
@@ -9,4 +9,6 @@ public interface Protocol {
     public static final String USER_JOINED = "@";
 
     public static final String USER_LEFT = "#";
+
+    public static final String USER_EXISTS = "$";
 }

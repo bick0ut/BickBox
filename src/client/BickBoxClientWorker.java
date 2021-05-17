@@ -1,13 +1,10 @@
-package online;
+package client;
 
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
-import static online.Protocol.*;
+import static client.Protocol.*;
 
 public class BickBoxClientWorker implements Runnable {
     private JTextArea logTextArea;
@@ -47,6 +44,9 @@ public class BickBoxClientWorker implements Runnable {
                 } else if (protocol.equals(USER_LEFT)){ //user has left, only need one line
                     String username = msg.split(" ")[0].substring(1);
                     logTextArea.append(username+" has left the chat!" + "\n\n");
+                } else if (protocol.equals(USER_EXISTS)){
+                    System.out.println("Username already exists!");
+                    System.exit(0);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
